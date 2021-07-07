@@ -5,6 +5,7 @@
     r.onload = function() {
       document.getElementById('results').innerHTML = r.responseText;
       document.getElementById('response').value = r.responseText;
+      window.scrollTo(0, 0);
     }
     r.send();
   }
