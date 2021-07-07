@@ -1,0 +1,21 @@
+<div class="next">
+  {{#if (gte offset limit)}}
+  <a href="#" class="bend" onclick="window.search('{{query}}',{{sub offset limit}})">Previous</a>
+  {{else}}
+  <span class="bend"></span>
+  {{/if}}
+  <div class="bin">
+  {{#each (queryselect 0 nbHits limit offset 10)}}
+  {{#if (eq this ../offset)}}
+  <span>{{add 1 (div this ../limit)}}</span>
+  {{else}}
+  <a href="#" onclick="window.search('{{../query}}',{{this}})">{{add 1 (div this ../limit)}}</a>
+  {{/if}}
+  {{/each}}
+  </div>
+  {{#if (gt nbHits (add offset limit))}}
+  <a href="#" class="bend" onclick="window.search('{{query}}',{{add offset limit}})">Next</a>
+  {{else}}
+  <span class="bend"></span>
+  {{/if}}
+</div>

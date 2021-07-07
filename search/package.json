@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "fast-glob": "^3.2.6",
+    "handlebars": "^4.7.7",
+    "koa": "^2.13.1",
+    "koa-cache-control": "^2.0.0",
+    "koa-compress": "^5.0.1",
+    "koa-router": "^10.0.0",
+    "meilisearch": "^0.19.0"
+  }
+}

@@ -1,0 +1,19 @@
+<div class="entry">
+  {{#if (eq content_type "image/jpeg")}}
+  <a href="{{url}}"><div class="img" style="background-image: url({{url}})"></div></a>
+  {{/if}}
+  <div class="info">
+    <a href="{{url}}">
+      <div class="url">{{url}}</div>
+      {{#if title}}
+      <div class="title">{{title}}</div>
+      {{else}}
+      <div class="title">{{url}}</div>
+      {{/if}}
+      {{#if callsign}}
+      <div class="sign">{{callsign}}</div>
+      {{/if}}
+    </a>
+    <div class="main">{{{cuttext _formatted.main 100 300}}}</div>
+  </div>
+</div>

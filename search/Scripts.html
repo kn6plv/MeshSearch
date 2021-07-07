@@ -1,0 +1,14 @@
+<script>
+  function search(q,o) {
+    var r = new XMLHttpRequest();
+    r.open('GET', '/q?q='+encodeURIComponent(q)+'&o='+o);
+    r.onload = function() {
+      document.getElementById('results').innerHTML = r.responseText;
+      document.getElementById('response').value = r.responseText;
+    }
+    r.send();
+  }
+  window.onpageshow = function(e) {
+    document.getElementById('results').innerHTML = document.getElementById('response').value;
+  }
+</script>

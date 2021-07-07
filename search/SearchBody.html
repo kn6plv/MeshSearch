@@ -1,0 +1,8 @@
+<div class="rbody">
+  <div class="summary">About {{nbHits}} results ({{div processingTimeMs 1000}} seconds)</div>
+  {{#each hits}}
+    {{> SearchEntry }}
+  {{/each}}
+</div>
+{{> SearchNext }}
+<div class="foot">{{> SearchFoot }}</div>
