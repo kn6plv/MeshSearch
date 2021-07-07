@@ -27,6 +27,7 @@ class SearchPageUpdate {
       host: Config.engineHost,
       apiKey: Config.privateKey,
     });
+    this.client.createIndex(Config.index, { primaryKey: 'id' }).catch(() => {});
     this.index = this.client.index(Config.index);
   }
 

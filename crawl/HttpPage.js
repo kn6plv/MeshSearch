@@ -1,3 +1,4 @@
+const Config = require('../config/crawl')
 const Log = require('debug')('page');
 const HTTP = require('http');
 const HtmlParser = require('node-html-parser');
@@ -5,8 +6,8 @@ const ExtractHTMLLinks = require('./extract/HTMLLinks');
 const ExtractText = require('./extract/Text');
 const ExtractTitle = require('./extract/Title');
 
-const MAX_REDIRECT = 3;
-const GET_TIMEOUT = 5000;
+const MAX_REDIRECT = Config.maxRedirect;
+const GET_TIMEOUT = Config.getTimeout * 1000;
 
 class HttpPage {
 

@@ -5,6 +5,7 @@ const DNS = require('dns');
 const HttpPage = require('./HttpPage');
 const UrlQ = require('./UrlQ');
 const SearchPageUpdate = require('./search/PageUpdate');
+const SearchSelector = require('./search/Selector');
 
 const u = new SearchPageUpdate();
 
@@ -36,14 +37,18 @@ q.on('add', async _ => {
         console.log(url, q.status());
         const page = new HttpPage({ url: url, dns: lookup });
         if (await page.getStatus() === 200) {
-          const urls = page.getLinks().links;
-          urls.forEach(url => {
-            if (url.protocol === 'http:' && url.hostname.endsWith('.local.mesh')) {
-              q.addURL(`${url.origin}${url.pathname}${url.search}`);
-            }
-          });
+          if (SearchSelector.includePageLinks(page)) {
+            const urls = page.getLinks().links;
+            urls.forEach(url => {
+              if (SearchSelector.includeUrl(url)) {
+                q.addURL(`${url.origin}${url.pathname}${url.search}`);
+              }
+            });
+          }
           q.completeUrl(url);
-          u.addDoc(page);
+          if (SearchSelector.includePageInSearch(page)) {
+            u.addDoc(page);
+          }
         }
         else {
           q.completeUrl(url, 'error');
