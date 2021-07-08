@@ -1,6 +1,6 @@
 const FS = require('fs');
 
-const CACHE_MAXAGE = 0;// 24 * 60 * 60; // 24 hours
+const CACHE_MAXAGE = 24 * 60 * 60; // 24 hours
 
 const Pages = {
   '/':                  { fn: require('./Search') },
