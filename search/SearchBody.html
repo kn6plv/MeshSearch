@@ -1,5 +1,7 @@
 <div class="rbody">
+  {{#if (isdefined nbHits)}}
   <div class="summary">About {{nbHits}} results ({{div processingTimeMs 1000}} seconds)</div>
+  {{/if}}
   {{#each hits}}
     {{> SearchEntry }}
   {{/each}}

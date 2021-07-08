@@ -19,20 +19,17 @@ const Query = async function(ctx) {
   const query = search.get('q');
   const offset = parseInt(search.get('o') || 0);
   Log(query, offset);
-  if (!query) {
-    ctx.type = 'text/html';
-    ctx.body = '';
-  }
-  else {
-    const results = await Index.search(query, {
+  let results = {};
+  if (query) {
+    results = await Index.search(query, {
       offset: offset,
       limit: RESULTS_PER_PAGE,
       attributesToHighlight: [ 'main' ]
     });
     Log(results);
-    ctx.type = 'text/html';
-    ctx.body = Template.SearchBody(results);
   }
+  ctx.type = 'text/html';
+  ctx.body = Template.SearchBody(results);
 }
 
 module.exports = Query;
