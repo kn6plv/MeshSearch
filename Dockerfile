@@ -13,6 +13,7 @@ COPY crawl /search/crawl
 COPY search /search/search
 COPY config /search/config
 COPY Run.js /search/
+COPY minkebox /minkebox
 
 RUN apk add nodejs npm ;\
     cd /search ;\
