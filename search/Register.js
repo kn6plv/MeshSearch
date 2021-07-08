@@ -3,8 +3,8 @@ const FS = require('fs');
 const CACHE_MAXAGE = 24 * 60 * 60; // 24 hours
 
 const Pages = {
-  '/':                  { fn: require('./Search') },
-  '/q':                 { fn: require('./Query') },
+  '/':                  { fn: require('./Search').Search },
+  '/q':                 { fn: require('./Search').Query },
   '/css/main.css':      { path: `${__dirname}/main.css`, type: 'text/css' }
 };
 

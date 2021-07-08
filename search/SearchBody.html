@@ -1,10 +1,12 @@
+{{#if (isdefined nbHits)}}
 <div class="rbody">
-  {{#if (isdefined nbHits)}}
   <div class="summary">About {{nbHits}} results ({{div processingTimeMs 1000}} seconds)</div>
-  {{/if}}
   {{#each hits}}
     {{> SearchEntry }}
   {{/each}}
 </div>
 {{> SearchNext }}
+{{else}}
+<div class="rbody"></div>
+{{/if}}
 <div class="foot">{{> SearchFoot }}</div>

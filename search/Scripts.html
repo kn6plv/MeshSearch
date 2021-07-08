@@ -1,11 +1,16 @@
 <script>
   function search(q,o) {
     var r = new XMLHttpRequest();
-    r.open('GET', '/q?q='+encodeURIComponent(q)+'&o='+o);
+    var q = '?q=' + encodeURIComponent(q) + '&o=' + o;
+    r.open('GET', '/q'+q);
     r.onload = function() {
       document.getElementById('results').innerHTML = r.responseText;
       window.scrollTo(0, 0);
+      history.replaceState({}, null, q);
     }
     r.send();
+  }
+  window.onload = function() {
+    document.getElementById('q').value = new URLSearchParams(location.search).get('q') || '';
   }
 </script>
