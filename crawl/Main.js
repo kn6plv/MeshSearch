@@ -60,4 +60,9 @@ q.on('add', async _ => {
     }
   }
 });
-q.addURL('http://localnode.local.mesh');
+
+function crawl() {
+  q.addURL('http://localnode.local.mesh');
+}
+setInterval(crawl, Config.crawlFrequency * 1000);
+crawl();
