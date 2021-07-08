@@ -1,9 +1,9 @@
 <div class="entry">
   {{#if (eq content_type "image/jpeg")}}
-  <a href="{{url}}"><div class="img" style="background-image: url({{url}})"></div></a>
+  <a href="{{url}}" target="_blank"><div class="img" style="background-image: url({{url}})"></div></a>
   {{/if}}
   <div class="info">
-    <a href="{{url}}">
+    <a href="{{url}}" target="_blank">
       <div class="url">{{url}}</div>
       {{#if title}}
       <div class="title">{{title}}</div>
