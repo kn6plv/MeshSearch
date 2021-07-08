@@ -8,7 +8,7 @@ const RESULTS_PER_PAGE = 10;
 
 const Client = new MeiliSearch.MeiliSearch({
   host: Config.engineHost,
-  apiKey: Config.publicKey,
+  apiKey: Config.key
 });
 const Index = Client.index(Config.index);
 

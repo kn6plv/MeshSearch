@@ -25,7 +25,7 @@ class SearchPageUpdate {
   constructor() {
     this.client = new MeiliSearch.MeiliSearch({
       host: Config.engineHost,
-      apiKey: Config.privateKey,
+      apiKey: Config.key,
     });
     this.client.createIndex(Config.index, { primaryKey: 'id' }).catch(() => {});
     this.index = this.client.index(Config.index);
