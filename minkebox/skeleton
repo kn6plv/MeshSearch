@@ -1,0 +1,63 @@
+{
+  name: `AREDN Search`,
+  description: `Search engine for content only accessibly on the AREDN mesh network`,
+  uuid: `C4434A8D-CBD8-4456-98FE-7BCC2612D555`,
+  image: `gitlab.home:5005/kn6plv/mesh-search`,
+  tags: [
+    `AREDN`
+  ],
+  actions: [
+    {
+      type: `Header`,
+      title: `External Network`
+    },
+    {
+      type: `SelectNetwork`,
+      name: `primary`,
+      description: `Select which network the application will use.`
+    },
+    {
+      type: `EditEnvironmentAsCheckbox`,
+      name: `NAT`,
+      description: `Make search available on the network`,
+      initValue: false
+    }
+  ],
+  properties: [
+    {
+      type: `Directory`,
+      name: `/search/db`
+    },
+    {
+      type: `Port`,
+      name: `7701/tcp`,
+      port: 7701,
+      protocol: `TCP`,
+      nat: `{{NAT}}`,
+      web: {
+        type: `newtab`,
+        path: ``
+      },
+      mdns: {
+        type: `_http._tcp`
+      }
+    },
+    {
+      type: `Network`,
+      name: `primary`,
+      value: `home`
+    }
+  ],
+  monitor: {
+    cmd: `echo $(iptables -L RX -x -v -n | awk 'NR == 3 {print $2}') $(iptables -L TX -x -v -n | awk 'NR == 3 {print $2}')`,
+    target: `helper`,
+    init: `
+      <div style="min-width: 400px; height: 250px">
+        <canvas style="position: absolute" id="{{ID}}"></canvas>
+      </div>
+      <script>
+         networkTrafficGraph({ id: "{{ID}}" });
+      </script>
+    `
+  }
+}
