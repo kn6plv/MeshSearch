@@ -44,7 +44,7 @@ class SearchPageUpdate {
   }
 
   flush() {
-    Log('Flush');
+    Log('Flush', this.pending);
     const p = this.pending;
     this.pending = [];
     this.index.addDocuments(p);

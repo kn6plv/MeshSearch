@@ -6,7 +6,7 @@ module.exports = {
   key: Engine.privateKey,
   index: 'web1',
   crawlFrequency: 14400, // Every 4 hours
-  threads: 4,
+  threads: 8,
   maxRedirect: 3,
   getTimeout: 10
 };

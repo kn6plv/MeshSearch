@@ -69,10 +69,11 @@ class HttpPage {
       }
 
       if (this.statusCode === 200) {
-        if (this.headers['content-type'].indexOf('text/html') === 0) {
+        const contentType = this.getContentType();
+        if (contentType === 'text/html') {
           this.html = HtmlParser.parse(this.data);
         }
-        else if (this.headers['content-type'].indexOf('text/plain') === 0) {
+        else if (contentType === 'text/plain') {
           this.text = this.data;
         }
       }
@@ -99,7 +100,8 @@ class HttpPage {
       req = HTTP.get(this.url, { lookup: this.dns }, res => {
         this.statusCode = res.statusCode;
         this.headers = res.headers;
-        if (this.headers['content-type'] === 'text/html') {
+        const contentType = this.getContentType();
+        if (contentType === 'text/html' || contentType === 'text/plain') {
           res.setEncoding('utf8');
           res.on('data', chunk => this.data += chunk);
           res.on('end', () => {
@@ -160,7 +162,7 @@ class HttpPage {
   }
 
   getContentType() {
-    return this.headers['content-type'];
+    return (this.headers['content-type'] || '').split(';')[0];
   }
 
 }

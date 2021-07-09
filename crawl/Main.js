@@ -1,5 +1,6 @@
 #! /usr/bin/env node
 
+const Log = require('debug')('main');
 const Config = require('../config/crawl');
 const DNS = require('dns');
 const HttpPage = require('./HttpPage');
@@ -34,8 +35,8 @@ function crawl() {
           if (!url) {
             break;
           }
-          console.log(url, q.status());
           const page = new HttpPage({ url: url, dns: lookup });
+          Log(url);
           if (await page.getStatus() === 200) {
             if (SearchSelector.includePageLinks(page)) {
               const urls = page.getLinks().links;
