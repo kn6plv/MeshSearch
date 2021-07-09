@@ -1,5 +1,5 @@
 <div class="entry">
-  {{#if (eq content_type "image/jpeg")}}
+  {{#if (or (eq content_type "image/jpeg") (eq content_type "image/gif"))}}
   <a href="{{url}}" target="_blank"><div class="img" style="background-image: url({{url}})"></div></a>
   {{/if}}
   <div class="info">
