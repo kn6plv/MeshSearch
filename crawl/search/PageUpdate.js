@@ -44,7 +44,7 @@ class SearchPageUpdate {
   }
 
   flush() {
-    Log('Flush', this.pending);
+    Log('Flush', this.pending.map(p => [ p.url, p.content_type ]));
     const p = this.pending;
     this.pending = [];
     this.index.addDocuments(p);
