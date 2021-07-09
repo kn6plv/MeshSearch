@@ -21,7 +21,7 @@ async function DoSearch(ctx) {
   }
   const offset = parseInt(search.get('o') || 0);
   Log(query, offset);
-  const results = await Index.search(query, {
+  const results = await Index.search(query.trim(), {
     offset: offset,
     limit: RESULTS_PER_PAGE,
     attributesToHighlight: [ 'main' ]
