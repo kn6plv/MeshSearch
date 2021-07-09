@@ -16,7 +16,9 @@ COPY Run.js /search/
 COPY minkebox /minkebox
 
 RUN apk add nodejs npm ;\
-    cd /search ;\
+    cd /search ; npm install --production ;\
+    cd /search/search ; npm install --production ;\
+    cd /search/crawl ; npm install --production ;\
     npm install --production ;\
     apk del npm build-base curl git
 
