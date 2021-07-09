@@ -68,8 +68,13 @@ class HttpPage {
         break;
       }
 
-      if (this.statusCode === 200 && this.headers['content-type'].indexOf('text/html') === 0) {
-        this.html = HtmlParser.parse(this.data);
+      if (this.statusCode === 200) {
+        if (this.headers['content-type'].indexOf('text/html') === 0) {
+          this.html = HtmlParser.parse(this.data);
+        }
+        else if (this.headers['content-type'].indexOf('text/plain') === 0) {
+          this.text = this.data;
+        }
       }
     }
     catch (e) {

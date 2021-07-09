@@ -17,6 +17,9 @@ class ExtractText {
         ]
       });
     }
+    else if (this.page.text) {
+      this.text = this.page.text;
+    }
   }
 }
 
