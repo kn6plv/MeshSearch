@@ -68,7 +68,7 @@ class HttpPage {
         break;
       }
 
-      if (this.statusCode === 200 && this.headers['content-type'] === 'text/html') {
+      if (this.statusCode === 200 && this.headers['content-type'].indexOf('text/html') === 0) {
         this.html = HtmlParser.parse(this.data);
       }
     }

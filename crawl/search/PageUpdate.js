@@ -1,6 +1,7 @@
 const Config = require('../../config/crawl');
 const Crypto = require('crypto');
 const MeiliSearch = require('meilisearch');
+const Log = require('debug')('search');
 
 class Page {
   constructor(page) {
@@ -32,6 +33,7 @@ class SearchPageUpdate {
   }
 
   addDoc(doc) {
+    Log('addDoc:', doc.url.toString());
     this.index.addDocuments([ new Page(doc) ]);
   }
 

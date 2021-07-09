@@ -7,7 +7,7 @@ class ExtractTitle {
 
   run() {
     if (this.page.html) {
-      this.title = this.page.html.querySelector('title').text;
+      this.title = (this.page.html.querySelector('title') || {}).text;
     }
   }
 }
