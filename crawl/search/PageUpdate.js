@@ -3,6 +3,8 @@ const Crypto = require('crypto');
 const MeiliSearch = require('meilisearch');
 const Log = require('debug')('search');
 
+const MAX_PENDING = 16;
+
 class Page {
   constructor(page) {
     this.url = page.url.toString();
@@ -30,11 +32,22 @@ class SearchPageUpdate {
     });
     this.client.createIndex(Config.index, { primaryKey: 'id' }).catch(() => {});
     this.index = this.client.index(Config.index);
+    this.pending = [];
   }
 
   addDoc(doc) {
     Log('addDoc:', doc.url.toString());
-    this.index.addDocuments([ new Page(doc) ]);
+    this.pending.push(new Page(doc));
+    if (this.pending.length >= MAX_PENDING) {
+      this.flush();
+    }
+  }
+
+  flush() {
+    Log('Flush');
+    const p = this.pending;
+    this.pending = [];
+    this.index.addDocuments(p);
   }
 
 }

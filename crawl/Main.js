@@ -57,6 +57,9 @@ function crawl() {
       }
       finally {
         running--;
+        if (running === 0) {
+          u.flush();
+        }
       }
     }
   });
