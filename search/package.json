@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "debug": "^3.1.0",
     "fast-glob": "^3.2.6",
     "handlebars": "^4.7.7",
     "koa": "^2.13.1",
