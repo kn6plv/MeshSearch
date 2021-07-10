@@ -18,6 +18,7 @@ html, body {
 .brand {
   display: inline-block;
   font-size: 22px;
+  color: black;
 }
 .box {
   display: inline-block;

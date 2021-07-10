@@ -1,7 +1,7 @@
 <script>
-  function search(q,o) {
+  function search(s,o) {
     var r = new XMLHttpRequest();
-    var q = '?q=' + encodeURIComponent(q) + '&o=' + o;
+    var q = '?q=' + encodeURIComponent(s || '') + (o ? '&o=' + o : '');
     r.open('GET', '/q'+q);
     r.onload = function() {
       document.getElementById('results').innerHTML = r.responseText;
@@ -9,6 +9,7 @@
       history.replaceState({}, null, q);
     }
     r.send();
+    document.getElementById('q').value = s || '';
   }
   window.onload = function() {
     document.getElementById('q').value = new URLSearchParams(location.search).get('q') || '';
