@@ -6,6 +6,7 @@ const MeiliSearch = require('meilisearch');
 const Template = require('./Template');
 
 const RESULTS_PER_PAGE = 10;
+const VALID_TIME = 24 * 60 * 60 * 1000; // 24 hours
 
 const Client = new MeiliSearch.MeiliSearch({
   host: Config.engineHost,
@@ -24,7 +25,8 @@ async function DoSearch(ctx) {
   const results = await Index.search(query.trim(), {
     offset: offset,
     limit: RESULTS_PER_PAGE,
-    attributesToHighlight: [ 'main' ]
+    attributesToHighlight: [ 'main' ],
+    filters: `last_index_time > ${Date.now() - VALID_TIME}`
   });
   Log(results);
   return results;
