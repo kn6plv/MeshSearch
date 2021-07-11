@@ -13,6 +13,7 @@ class ExtractHTMLLinks {
       this.extractAnchors();
       this.extractWindowLocations();
       this.extractMetas();
+      this.extractImages();
     }
   }
 
@@ -39,6 +40,15 @@ class ExtractHTMLLinks {
       const url = elem.getAttribute('url');
       if (url) {
         this.links.push(this.fixUrl(url));
+      }
+    });
+  }
+
+  extractImages() {
+    this.page.html.querySelectorAll('img').forEach(anchor => {
+      const src = anchor.getAttribute('src');
+      if (src) {
+        this.links.push(this.fixUrl(src));
       }
     });
   }
