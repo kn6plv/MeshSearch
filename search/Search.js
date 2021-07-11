@@ -26,7 +26,7 @@ async function DoSearch(ctx) {
     offset: offset,
     limit: RESULTS_PER_PAGE,
     attributesToHighlight: [ 'main' ],
-    filters: `last_index_time > ${Date.now() - VALID_TIME}`
+    filter: `last_index_time > ${Date.now() - VALID_TIME}`
   });
   Log(results);
   return results;
