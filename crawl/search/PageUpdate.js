@@ -20,6 +20,7 @@ class Page {
     const hash = Crypto.createHash('sha1');
     hash.update(this.url);
     this.id = hash.digest('hex');
+    this.last_index_time = Date.now();
   }
 }
 
