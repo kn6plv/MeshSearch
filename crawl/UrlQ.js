@@ -11,9 +11,9 @@ class UrlQ extends EventEmitter {
   }
 
   addURL(url) {
-    url = url.toLowerCase();
-    if (!this.seen[url]) {
-      this.seen[url] = { status: 'pending' };
+    const key = url.toLowerCase();
+    if (!this.seen[key]) {
+      this.seen[key] = { status: 'pending', url: url };
       this.pending.push(url);
       this.emit('add', this.status());
     }
@@ -23,17 +23,18 @@ class UrlQ extends EventEmitter {
     if (!this.pending.length) {
       return null;
     }
-    const next = this.pending.shift();
-    this.seen[next].status = 'active';
-    this.active[next] = this.seen[next];
+    const url = this.pending.shift();
+    const key = url.toLowerCase();
+    this.seen[key].status = 'active';
+    this.active[key] = this.seen[key];
     this.emit('active', this.status());
-    return next;
+    return url;
   }
 
   completeUrl(url, status) {
-    url = url.toLowerCase();
-    delete this.active[url];
-    this.seen[url].status = status || 'done';
+    const key = url.toLowerCase();
+    delete this.active[key];
+    this.seen[key].status = status || 'done';
     this.emit('complete', this.status());
   }
 
