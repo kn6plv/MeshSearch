@@ -12,6 +12,7 @@ RUN apk add build-base curl git ;\
 COPY crawl /search/crawl
 COPY search /search/search
 COPY config /search/config
+COPY utils /search/utils
 COPY Run.js /search/
 COPY minkebox /minkebox
 
