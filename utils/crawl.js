@@ -44,6 +44,10 @@ page.getStatus().then(status => {
   else {
     console.log('*** Links no included');
   }
+  const main = page.getSignificantText().text;
+  if (main) {
+    console.log('Main:', main.substring(0, 100), `(len = ${main.length})`);
+  }
   if (!SearchSelector.includePageInSearch(page)) {
     console.log('*** Page exclude');
   }
