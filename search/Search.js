@@ -7,6 +7,8 @@ const Template = require('./Template');
 
 const RESULTS_PER_PAGE = 10;
 const VALID_TIME = 24 * 60 * 60 * 1000; // 24 hours
+const HIGHLIGHTS = [ 'main', 'main1', 'main2', 'main3', 'main4', 'main5', 'main6', 'main7', 'main8', 'main9' ];
+const HIGHLIGHT_CROP = 350;
 
 const Client = new MeiliSearch.MeiliSearch({
   host: Config.engineHost,
@@ -25,8 +27,15 @@ async function DoSearch(ctx) {
   const results = await Index.search(query.trim(), {
     offset: offset,
     limit: RESULTS_PER_PAGE,
-    attributesToHighlight: [ 'main' ],
-    filter: `last_index_time > ${Date.now() - VALID_TIME}`
+    attributesToHighlight: HIGHLIGHTS,
+    filter: `last_index_time > ${Date.now() - VALID_TIME}`,
+    cropLength: HIGHLIGHT_CROP
+  });
+  results.hits.forEach(hit => {
+    const key = HIGHLIGHTS.find(key => hit._formatted[key] && hit._formatted[key].indexOf('<em>') !== -1);
+    if (key) {
+      hit._formatted.main = hit._formatted[key];
+    }
   });
   Log(results);
   return results;

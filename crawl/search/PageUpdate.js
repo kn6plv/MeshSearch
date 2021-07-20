@@ -4,6 +4,7 @@ const MeiliSearch = require('meilisearch');
 const Log = require('debug')('search');
 
 const MAX_PENDING = 16;
+const WORD_LIMIT = 500;
 
 class Page {
   constructor(page) {
@@ -11,6 +12,17 @@ class Page {
     this.title = page.getTitle().title;
     this.content_type = page.getContentType();
     this.main = page.getSignificantText().text;
+    if (this.main) {
+      const words = this.main.split(' ');
+      if (words.length >= WORD_LIMIT) {
+        // Split main into multiple attributes
+        let idx = 0;
+        for (let i = 0; i < words.length; i += WORD_LIMIT) {
+          this[`main${idx === 0 ? '' : idx}`] = words.slice(i, i + WORD_LIMIT).join(' ');
+          idx++;
+        }
+      }
+    }
     this.links = page.getLinks().links.map(url => url.toString());
     const callsign = page.url.hostname.split('-')[0];
     if (/^(A[A-L]|K[A-Z]|N[A-Z]|W[A-Z]|K|N|W){1}\d{1}[A-Z]{1,3}$/i.exec(callsign)) {
