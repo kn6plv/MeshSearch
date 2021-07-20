@@ -5,6 +5,7 @@ const HtmlParser = require('node-html-parser');
 const ExtractHTMLLinks = require('./extract/HTMLLinks');
 const ExtractText = require('./extract/Text');
 const ExtractTitle = require('./extract/Title');
+const PDF = require('./extract/PDF');
 
 const MAX_REDIRECT = Config.maxRedirect;
 const GET_TIMEOUT = Config.getTimeout * 1000;
@@ -69,12 +70,18 @@ class HttpPage {
       }
 
       if (this.statusCode === 200) {
-        const contentType = this.getContentType();
-        if (contentType === 'text/html') {
-          this.html = HtmlParser.parse(this.data);
-        }
-        else if (contentType === 'text/plain') {
-          this.text = this.data;
+        switch (this.getContentType()) {
+          case 'text/html':
+            this.html = HtmlParser.parse(this.data);
+            break;
+          case 'text/plain':
+            this.text = this.data;
+            break;
+          case 'application/pdf':
+            this.pdf = await PDF.parse(this.data);
+            break;
+          default:
+            break;
         }
       }
     }
@@ -89,7 +96,7 @@ class HttpPage {
   async fetch() {
     this.statusCode = 0;
     this.headers = [];
-    this.data = '';
+    this.data = null;
     return new Promise((resolve, reject) => {
       let req;
       const timeout = setTimeout(() => {
@@ -100,21 +107,33 @@ class HttpPage {
       req = HTTP.get(this.url, { lookup: this.dns }, res => {
         this.statusCode = res.statusCode;
         this.headers = res.headers;
-        const contentType = this.getContentType();
-        if (contentType === 'text/html' || contentType === 'text/plain') {
-          res.setEncoding('utf8');
-          res.on('data', chunk => this.data += chunk);
-          res.on('end', () => {
+        switch (this.getContentType()) {
+          case 'text/html':
+          case 'text/plain':
+            this.data = '';
+            res.setEncoding('utf8');
+            res.on('data', chunk => this.data += chunk);
+            res.on('end', () => {
+              clearTimeout(timeout);
+              req = null;
+              resolve();
+            });
+            break;
+          case 'application/pdf':
+            this.data = Buffer.alloc(0);
+            res.on('data', chunk => this.data = Buffer.concat([this.data, chunk]));
+            res.on('end', () => {
+              clearTimeout(timeout);
+              req = null;
+              resolve();
+            });
+            break;
+          default:
             clearTimeout(timeout);
+            req.destroy();
             req = null;
             resolve();
-          });
-        }
-        else {
-          clearTimeout(timeout);
-          req.destroy();
-          req = null;
-          resolve();
+            break;
         }
       });
       req.on('error', e => {
