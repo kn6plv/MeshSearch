@@ -21,13 +21,13 @@ const lookup = (hostname, _, callback) => {
 
 const page = new HttpPage({ url: process.argv[2], dns: lookup });
 page.getStatus().then(status => {
+  const hash = Crypto.createHash('sha1');
+  hash.update(page.url.toString());
+  console.log('Id:', hash.digest('hex'));
   if (status !== 200) {
     console.log('Error', status, page.url.toString());
     return;
   }
-  const hash = Crypto.createHash('sha1');
-  hash.update(page.url.toString());
-  console.log('Id:', hash.digest('hex'));
   console.log('Title:', page.getTitle().title);
   console.log('Content-Type:', page.getContentType());
   const links = page.getLinks().links;
