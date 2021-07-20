@@ -28,7 +28,7 @@ async function DoSearch(ctx) {
     offset: offset,
     limit: RESULTS_PER_PAGE,
     attributesToHighlight: HIGHLIGHTS,
-    filter: `last_index_time > ${Date.now() - VALID_TIME}`,
+    filters: `last_index_time > ${Date.now() - VALID_TIME}`,
     cropLength: HIGHLIGHT_CROP
   });
   results.hits.forEach(hit => {

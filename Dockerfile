@@ -5,7 +5,7 @@ RUN apk add build-base curl git ;\
     cd /search ;\
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y ;\
     source $HOME/.cargo/env ;\
-    git clone --depth 1 https://github.com/meilisearch/MeiliSearch.git ;\
+    git clone --depth 1 --branch release-v0.20.0 https://github.com/meilisearch/MeiliSearch.git ;\
     cd MeiliSearch ;\
     cargo build --release
 
