@@ -9,7 +9,7 @@ const PDF = {
     for (let i = 1; i <= nrPages; i++) {
       const page = await pdf.getPage(i);
       const pageText = await page.getTextContent();
-      text += pageText.items.map(item => item.str).join('');
+      text += ' ' + pageText.items.map(item => item.str).join(' ');
     }
     return {
       pdf: pdf,
