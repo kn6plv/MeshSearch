@@ -6,7 +6,7 @@ const MeiliSearch = require('meilisearch');
 const Template = require('./Template');
 
 const RESULTS_PER_PAGE = 10;
-const VALID_TIME = 24 * 60 * 60 * 1000; // 24 hours
+const VALID_TIME = 12 * 60 * 60 * 1000; // 12 hours
 const HIGHLIGHTS = [ 'main', 'main1', 'main2', 'main3', 'main4', 'main5', 'main6', 'main7', 'main8', 'main9' ];
 const HIGHLIGHT_CROP = 350;
 
