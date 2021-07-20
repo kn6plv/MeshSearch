@@ -100,7 +100,7 @@ class HttpPage {
     return new Promise((resolve, reject) => {
       let req;
       let timeout = null;
-      function restartTimeout() {
+      const restartTimeout = () => {
         if (timeout) {
           clearTimeout(timeout);
         }
