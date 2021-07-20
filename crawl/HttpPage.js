@@ -72,10 +72,10 @@ class HttpPage {
       if (this.statusCode === 200) {
         switch (this.getContentType()) {
           case 'text/html':
-            this.html = HtmlParser.parse(this.data);
+            this.html = HtmlParser.parse(this.data.toString('utf8'));
             break;
           case 'text/plain':
-            this.text = this.data;
+            this.text = this.data.toString('utf8');
             break;
           case 'application/pdf':
             this.pdf = await PDF.parse(this.data);
@@ -99,29 +99,31 @@ class HttpPage {
     this.data = null;
     return new Promise((resolve, reject) => {
       let req;
-      const timeout = setTimeout(() => {
-        if (req) {
-          req.destroy(new Error('timeout'));
+      let timeout = null;
+      function restartTimeout() {
+        if (timeout) {
+          clearTimeout(timeout);
         }
-      }, GET_TIMEOUT);
+        timeout = setTimeout(() => {
+          if (req) {
+            this.data = null;
+            req.destroy(new Error('timeout'));
+          }
+        }, GET_TIMEOUT);
+      }
+      restartTimeout();
       req = HTTP.get(this.url, { lookup: this.dns }, res => {
         this.statusCode = res.statusCode;
         this.headers = res.headers;
         switch (this.getContentType()) {
           case 'text/html':
           case 'text/plain':
-            this.data = '';
-            res.setEncoding('utf8');
-            res.on('data', chunk => this.data += chunk);
-            res.on('end', () => {
-              clearTimeout(timeout);
-              req = null;
-              resolve();
-            });
-            break;
           case 'application/pdf':
             this.data = Buffer.alloc(0);
-            res.on('data', chunk => this.data = Buffer.concat([this.data, chunk]));
+            res.on('data', chunk => {
+              restartTimeout();
+              this.data = Buffer.concat([this.data, chunk]);
+            });
             res.on('end', () => {
               clearTimeout(timeout);
               req = null;
