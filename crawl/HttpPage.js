@@ -2,12 +2,11 @@ const Config = require('../config/crawl')
 const Log = require('debug')('page');
 const HTTP = require('http');
 const HtmlParser = require('node-html-parser');
-const ExtractHTMLLinks = require('./extract/HTMLLinks');
+const ExtractLinks = require('./extract/Links');
 const ExtractText = require('./extract/Text');
 const ExtractTitle = require('./extract/Title');
 const PDF = require('./extract/PDF');
 
-const MAX_REDIRECT = Config.maxRedirect;
 const GET_TIMEOUT = Config.getTimeout * 1000;
 
 class HttpPage {
@@ -47,42 +46,38 @@ class HttpPage {
 
   async run() {
     try {
-      for (let i = MAX_REDIRECT; i > 0; i--) {
-        if (this.url.protocol !== 'http:') {
-          this.statusCode = HttpPage.ERROR_CODE.BAD_PROTOCOL;
-          throw new Error(`bad protocol`);
-        }
-        // Fetch the page
-        await this.fetch();
-        // Handle status code redirects
-        switch (this.statusCode) {
-          case 301:
-          case 302:
-          case 303:
-          case 307:
-          case 308:
-            this.url = new URL(this.headers['location'], this.url);
-            continue;
-          default:
-            break;
-        }
-        break;
+      if (this.url.protocol !== 'http:') {
+        this.statusCode = HttpPage.ERROR_CODE.BAD_PROTOCOL;
+        throw new Error(`bad protocol`);
       }
-
-      if (this.statusCode === 200) {
-        switch (this.getContentType()) {
-          case 'text/html':
-            this.html = HtmlParser.parse(this.data.toString('utf8'));
-            break;
-          case 'text/plain':
-            this.text = this.data.toString('utf8');
-            break;
-          case 'application/pdf':
-            this.pdf = await PDF.parse(this.data);
-            break;
-          default:
-            break;
-        }
+      // Fetch the page
+      await this.fetch();
+      // Handle status code redirects
+      switch (this.statusCode) {
+        case 301:
+        case 302:
+        case 303:
+        case 307:
+        case 308:
+          this.redirect = this.headers['location'];
+          break;
+        case 200:
+          switch (this.getContentType()) {
+            case 'text/html':
+              this.html = HtmlParser.parse(this.data.toString('utf8'));
+              break;
+            case 'text/plain':
+              this.text = this.data.toString('utf8');
+              break;
+            case 'application/pdf':
+              this.pdf = await PDF.parse(this.data);
+              break;
+            default:
+              break;
+          }
+          break;
+        default:
+          break;
       }
     }
     catch (e) {
@@ -163,7 +158,7 @@ class HttpPage {
 
   getLinks() {
     if (!this.links) {
-      this.links = new ExtractHTMLLinks(this);
+      this.links = new ExtractLinks(this);
     }
     return this.links;
   }
