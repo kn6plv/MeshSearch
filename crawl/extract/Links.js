@@ -1,6 +1,6 @@
 const Log = require('debug')('links');
 
-class ExtractHTMLLinks {
+class ExtractLinks {
 
   constructor(page) {
     this.page = page;
@@ -9,6 +9,9 @@ class ExtractHTMLLinks {
   }
 
   run() {
+    if (this.page.redirect) {
+      this.links.push(this.fixUrl(this.page.redirect));
+    }
     if (this.page.html) {
       this.extractAnchors();
       this.extractWindowLocations();
@@ -59,4 +62,4 @@ class ExtractHTMLLinks {
 
 }
 
-module.exports = ExtractHTMLLinks;
+module.exports = ExtractLinks;

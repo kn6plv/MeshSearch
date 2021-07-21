@@ -5,8 +5,7 @@ module.exports = {
   engineHost: `http://${Engine.address}`,
   key: Engine.privateKey,
   index: 'web1',
-  crawlFrequency: 14400, // Every 4 hours
+  crawlFrequency: 4 * 60 * 60, // Every 4 hours
   threads: 8,
-  maxRedirect: 3,
   getTimeout: 10
 };
