@@ -7,6 +7,9 @@ const HttpPage = require('./HttpPage');
 const UrlQ = require('./UrlQ');
 const SearchPageUpdate = require('./search/PageUpdate');
 const SearchSelector = require('./search/Selector');
+const Robots = require('./search/Robots');
+
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
 const u = new SearchPageUpdate();
 
@@ -42,7 +45,8 @@ function crawl() {
               const urls = page.getLinks().links;
               urls.forEach(url => {
                 if (SearchSelector.includeUrl(url)) {
-                  q.addURL(`${url.origin}${url.pathname}${url.search}`);
+                  const nurl = `${url.origin}${url.pathname}${url.search}`;
+                  Robots.canCrawl(nurl).then(okay => okay && q.addURL(nurl));
                 }
               });
             }
