@@ -4,5 +4,8 @@ module.exports = {
   },
   php_exclude: function(url) {
     return url.pathname.toLowerCase().endsWith('.php');
+  },
+  urad_exclude: function(url) {
+    return url.hostname.toLowerCase().indexOf('uradmonitor') !== -1;
   }
 }
