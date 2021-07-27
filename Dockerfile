@@ -1,4 +1,4 @@
-FROM alpine:3.14
+FROM alpine:3.12
 
 RUN apk add build-base curl git ;\
     mkdir -p /search ;\
