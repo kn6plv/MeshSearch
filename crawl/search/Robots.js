@@ -53,6 +53,7 @@ class Robots {
                 break;
             }
           }
+          delete pending[txt];
           resolve();
         });
       }
