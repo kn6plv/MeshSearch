@@ -7,6 +7,7 @@ const ExtractText = require('./extract/Text');
 const ExtractTitle = require('./extract/Title');
 const PDF = require('./extract/PDF');
 
+const USER_AGENT = Config.userAgent;
 const GET_TIMEOUT = Config.getTimeout * 1000;
 
 class HttpPage {
@@ -107,7 +108,7 @@ class HttpPage {
         }, GET_TIMEOUT);
       }
       restartTimeout();
-      req = HTTP.get(this.url, { lookup: this.dns }, res => {
+      req = HTTP.get(this.url, { lookup: this.dns, headers: { 'User-Agent': USER_AGENT } }, res => {
         this.statusCode = res.statusCode;
         this.headers = res.headers;
         switch (this.getContentType()) {
