@@ -15,11 +15,6 @@ module.exports = {
     },
     php: function(url) {
       return url.pathname.toLowerCase().endsWith('.php');
-    },
-
-    // This is causing me trouble so avoid for the moment until I fix it properly
-    DSLRcam: function(url) {
-      return url.pathname.toLowerCase().indexOf('dslrcam') !== -1;
     }
 
   },
