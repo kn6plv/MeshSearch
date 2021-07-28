@@ -14,6 +14,5 @@ ChildProcess.spawn(`${__dirname}/MeiliSearch/target/release/meilisearch`,
     stdio: 'inherit'
   }
 );
-
-require('./search/Main');
-require('./crawl/Main');
+ChildProcess.spwan(`${__dirname}/search/Main`, [], { stdio: 'inherit' });
+ChildProcess.spwan(`${__dirname}/crawl/Main`, [], { stdio: 'inherit' });
