@@ -23,7 +23,8 @@ class ExtractLinks {
   extractAnchors() {
     this.page.html.querySelectorAll('a').forEach(anchor => {
       const href = anchor.getAttribute('href');
-      if (href) {
+      const rel = (anchor.getAttribute('rel') || '').toLowerCase();
+      if (href && rel !== 'nofollow') {
         this.links.push(this.fixUrl(href));
       }
     });
