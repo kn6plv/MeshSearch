@@ -8,7 +8,7 @@ ChildProcess.spawn(`${__dirname}/MeiliSearch/target/release/meilisearch`,
     `--http-addr=${Config.address}`,
     `--master-key=${Config.masterKey}`,
     `--db-path=${__dirname}/${Config.db}`,
-    `--no-analytics`
+    `--no-analytics=1`
   ],
   {
     stdio: 'inherit'
