@@ -46,7 +46,9 @@ function crawl() {
               urls.forEach(url => {
                 if (SearchSelector.includeUrl(url)) {
                   const nurl = `${url.origin}${url.pathname}${url.search}`;
-                  Robots.canCrawl(nurl).then(okay => okay && q.addURL(nurl));
+                  if (!q.visited(nurl)) {
+                    Robots.canCrawl(nurl).then(okay => okay && q.addURL(nurl));
+                  }
                 }
               });
             }

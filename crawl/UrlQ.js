@@ -46,6 +46,10 @@ class UrlQ extends EventEmitter {
     };
   }
 
+  visited(url) {
+    return !!this.seen[url.toLowerCase()];
+  }
+
 }
 
 module.exports = UrlQ;
