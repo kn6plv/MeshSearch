@@ -3,21 +3,22 @@ const NegList = require('./NegList');
 const Selector = {
 
   includeUrl(url) {
-    for (let key in NegList) {
-      if (NegList[key](url)) {
-        return false;
-      }
-    }
-    return url.protocol === 'http:' && url.hostname.endsWith('.local.mesh');
+    return this._include(url, NegList.excludeUrl);
   },
 
   includePageLinks(page) {
-    return true;
+    return this._include(page.url, NegList.excludePageLinks);
   },
 
   includePageInSearch(page) {
-    if (page.url.hostname === 'localnode.local.mesh') {
-      return false;
+    return this._include(page.url, NegList.excludePageInSearch);
+  },
+
+  _include(url, exclude) {
+    for (let key in exclude) {
+      if (exclude[key](url)) {
+        return false;
+      }
     }
     return true;
   }
