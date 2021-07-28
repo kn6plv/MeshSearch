@@ -11,6 +11,8 @@ const USER_AGENT = Config.userAgent;
 const GET_TIMEOUT = Config.getProgressTimeout * 1000;
 const GET_OVER_TIMEOUT = Config.getTimeout * 1000;
 
+let dnsLookup;
+
 class HttpPage {
 
   static ERROR_CODE = {
@@ -18,13 +20,13 @@ class HttpPage {
     BAD_PROTOCOL: -2,
     HOST_NOT_FOUND: -3,
     HOST_UNREACHABLE: -4,
+    TIMEOUT: -5
   }
 
   constructor(config) {
     this.url = new URL(config.url);
     this.statusCode = 0;
     this.waiting = [];
-    this.dns = config.dns;
     setTimeout(async () => {
       try {
         await this.run();
@@ -100,7 +102,9 @@ class HttpPage {
       let timeout = null;
       let otimeout = null;
       const timeoutfn = () => {
+        Log('timeout:', this.url.toString());
         this.data = null;
+        this.statusCode = HttpPage.ERROR_CODE.TIMEOUT;
         if (req) {
           req.destroy(new Error('timeout'));
         }
@@ -118,7 +122,8 @@ class HttpPage {
         }
       }
       restartTimeout();
-      req = HTTP.get(this.url, { lookup: this.dns, headers: { 'User-Agent': USER_AGENT } }, r => {
+      Log('get:', this.url.toString());
+      req = HTTP.get(this.url, { lookup: dnsLookup, headers: { 'User-Agent': USER_AGENT } }, r => {
         res = r;
         this.statusCode = res.statusCode;
         this.headers = res.headers;
@@ -196,6 +201,10 @@ class HttpPage {
     return (this.headers['content-type'] || '').split(';')[0];
   }
 
+}
+
+HttpPage.setDNS = function(lookup) {
+  dnsLookup = lookup;
 }
 
 module.exports = HttpPage;

@@ -25,6 +25,7 @@ const lookup = (hostname, _, callback) => {
     }
   });
 }
+HttpPage.setDNS(lookup);
 
 function crawl() {
   const q = new UrlQ();
@@ -38,7 +39,7 @@ function crawl() {
           if (!url) {
             break;
           }
-          const page = new HttpPage({ url: url, dns: lookup });
+          const page = new HttpPage({ url: url });
           Log(url);
           if (await page.getStatus() === 200) {
             if (SearchSelector.includePageLinks(page)) {

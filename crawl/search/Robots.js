@@ -1,7 +1,7 @@
 
 const RobotsParser = require('robots-parser');
 const URL = require('url');
-const fetch = require('node-fetch');
+const HttpPage = require('../HttpPage');
 const NegList = require('./NegList');
 const Log = require('debug')('robots');
 
@@ -42,24 +42,20 @@ class Robots {
           }
         }
         pending[txt] = new Promise(async resolve => {
-          try {
-            Log('fetch:', txt);
-            const req = await fetch(txt);
-            const contents = await req.text();
-            sites[txt] = new RobotsParser(txt, contents);
+          Log('fetch:', txt);
+          const page = new HttpPage({ url: txt });
+          const status = await page.getStatus();
+          if (status === 200 && page.text) {
+            sites[txt] = new RobotsParser(txt, page.text);
             Log('Added:', txt);
           }
-          catch (e) {
-            Log(e);
-            switch (e.code) {
-              case 'ECONNREFUSED':
-              case 'EHOSTUNREACH':
-                sites[txt] = { isAllowed: () => false };
-                break;
-              default:
-                sites[txt] = { isAllowed: () => true };
-                break;
-            }
+          else if (status < 0) {
+            sites[txt] = { isAllowed: () => false };
+            Log('Added: default false');
+          }
+          else {
+            sites[txt] = { isAllowed: () => true };
+            Log('Added: default true');
           }
           delete pending[txt];
           resolve();
