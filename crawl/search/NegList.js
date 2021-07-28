@@ -25,9 +25,11 @@ module.exports = {
 
     // Custom
 
+    // Do not fetch any links as some of them will cause the device to reset.
     uradmonitor: function(url) {
       return url.hostname.toLowerCase().indexOf('uradmonitor') !== -1;
     }
+
   },
 
   excludePageInSearch: {
@@ -39,5 +41,19 @@ module.exports = {
     }
 
     // Custom
+  },
+
+  excludeRobots: {
+
+    // Default - none
+
+    // Custom
+
+    // Do not fetch the robots.txt file for any uradmonitor as the '/r' part of robots.txt will
+    // reset the device.
+    uradmonitor: function(url) {
+      return url.hostname.toLowerCase().indexOf('uradmonitor') !== -1;
+    }
+
   }
 }

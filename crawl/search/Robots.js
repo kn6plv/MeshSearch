@@ -2,6 +2,7 @@
 const RobotsParser = require('robots-parser');
 const URL = require('url');
 const fetch = require('node-fetch');
+const NegList = require('./NegList');
 const Log = require('debug')('robots');
 
 const ROBOTS_AGENT = 'AREDNCrawlBot';
@@ -33,6 +34,13 @@ class Robots {
         return okay;
       }
       if (!pending[txt]) {
+        const exclude = NegList.excludeRobots;
+        for (let key in exclude) {
+          if (exclude[key](u)) {
+            sites[txt] = { isAllowed: () => true };
+            return true;
+          }
+        }
         pending[txt] = new Promise(async resolve => {
           try {
             Log('fetch:', txt);
