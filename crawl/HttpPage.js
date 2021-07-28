@@ -128,6 +128,7 @@ class HttpPage {
             break;
           default:
             clearTimeout(timeout);
+            res.destroy();
             req.destroy();
             req = null;
             resolve();
