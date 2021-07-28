@@ -8,7 +8,8 @@ const ExtractTitle = require('./extract/Title');
 const PDF = require('./extract/PDF');
 
 const USER_AGENT = Config.userAgent;
-const GET_TIMEOUT = Config.getTimeout * 1000;
+const GET_TIMEOUT = Config.getProgressTimeout * 1000;
+const GET_OVER_TIMEOUT = Config.getTimeout * 1000;
 
 class HttpPage {
 
@@ -94,21 +95,31 @@ class HttpPage {
     this.headers = [];
     this.data = null;
     return new Promise((resolve, reject) => {
-      let req;
+      let req = null;
+      let res = null;
       let timeout = null;
+      let otimeout = null;
+      const timeoutfn = () => {
+        this.data = null;
+        if (req) {
+          req.destroy(new Error('timeout'));
+        }
+        if (res) {
+          res.destroy(new Error('timeout'));
+        }
+      };
       const restartTimeout = () => {
         if (timeout) {
           clearTimeout(timeout);
         }
-        timeout = setTimeout(() => {
-          if (req) {
-            this.data = null;
-            req.destroy(new Error('timeout'));
-          }
-        }, GET_TIMEOUT);
+        timeout = setTimeout(timeoutfn, GET_TIMEOUT);
+        if (!otimeout) {
+          otimeout = setTimeout(timeoutfn, GET_OVER_TIMEOUT);
+        }
       }
       restartTimeout();
-      req = HTTP.get(this.url, { lookup: this.dns, headers: { 'User-Agent': USER_AGENT } }, res => {
+      req = HTTP.get(this.url, { lookup: this.dns, headers: { 'User-Agent': USER_AGENT } }, r => {
+        res = r;
         this.statusCode = res.statusCode;
         this.headers = res.headers;
         switch (this.getContentType()) {
@@ -122,23 +133,25 @@ class HttpPage {
             });
             res.on('end', () => {
               clearTimeout(timeout);
-              req = null;
+              clearTimeout(otimeout);
               resolve();
             });
             break;
           default:
             clearTimeout(timeout);
+            clearTimeout(otimeout);
             res.destroy();
             req.destroy();
-            req = null;
             resolve();
             break;
         }
       });
       req.on('error', e => {
         clearTimeout(timeout);
-        req = null;
-        console.log(e);
+        clearTimeout(otimeout);
+        if (res) {
+          res.destroy(e);
+        }
         Log(`get error: ${e}`);
         switch (e.code) {
           case 'EHOSTUNREACH':
