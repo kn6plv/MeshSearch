@@ -35,7 +35,7 @@ page.getStatus().then(status => {
     if (links.length) {
       console.log('Links:');
       links.forEach(url => {
-        if (SearchSelector.includeUrl(url)) {
+        if (SearchSelector.includeUrl(url, page.url)) {
           console.log(`  ${url.origin}${url.pathname}${url.search}`);
         }
       });

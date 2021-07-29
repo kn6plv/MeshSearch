@@ -2,21 +2,21 @@ const NegList = require('./NegList');
 
 const Selector = {
 
-  includeUrl(url) {
-    return this._include(url, NegList.excludeUrl);
+  includeUrl(to, from) {
+    return this._include(to, from, NegList.excludeUrl);
   },
 
   includePageLinks(page) {
-    return this._include(page.url, NegList.excludePageLinks);
+    return this._include(page.url, null, NegList.excludePageLinks);
   },
 
   includePageInSearch(page) {
-    return this._include(page.url, NegList.excludePageInSearch);
+    return this._include(page.url, null, NegList.excludePageInSearch);
   },
 
-  _include(url, exclude) {
+  _include(to, from, exclude) {
     for (let key in exclude) {
-      if (exclude[key](url)) {
+      if (exclude[key](to, from)) {
         return false;
       }
     }

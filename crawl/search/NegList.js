@@ -4,18 +4,21 @@ module.exports = {
 
     // Default
 
-    offmesh: function(url) {
-      return !(url.protocol === 'http:' && url.hostname.endsWith('.local.mesh'));
+    offmesh: function(to, from) {
+      return !(to.protocol === 'http:' && to.hostname.endsWith('.local.mesh'));
     },
 
     // Custom
 
-    n2mhSites: function(url) {
-      return url.hostname.toLowerCase().indexOf('n2mh') !== -1;
+    // Exclude PHP links unless they come directly from a main mesh index page. Some PHP links may
+    // have side effects, so best to only shallow-crawl them.
+    php: function(to, from) {
+      return to.pathname.toLowerCase().endsWith('.php') && from.pathname !== '/cgi-bin/mesh';
     },
-    php: function(url) {
-      return url.pathname.toLowerCase().endsWith('.php');
-    }
+
+    n2mhSites: function(to, from) {
+      return to.hostname.toLowerCase().indexOf('n2mh') !== -1;
+    },
 
   },
 
