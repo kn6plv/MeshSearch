@@ -123,6 +123,9 @@ html, body {
   font-size: 18px;
   color: #008;
 }
+.entry .title:hover {
+  text-decoration: underline;
+}
 .entry .main {
   width: 600px;
   overflow: hidden;
