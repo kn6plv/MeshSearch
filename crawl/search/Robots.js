@@ -46,6 +46,7 @@ class Robots {
           const page = new HttpPage({ url: txt });
           const status = await page.getStatus();
           if (status === 200 && page.text) {
+            Log(page.text);
             sites[txt] = new RobotsParser(txt, page.text);
             Log('Added:', txt);
           }
