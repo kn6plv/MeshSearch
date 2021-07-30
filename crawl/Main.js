@@ -45,7 +45,7 @@ function crawl() {
             if (SearchSelector.includePageLinks(page)) {
               const urls = page.getLinks().links;
               urls.forEach(url => {
-                if (SearchSelector.includeUrl(url)) {
+                if (SearchSelector.includeUrl(url, page.url)) {
                   const nurl = `${url.origin}${url.pathname}${url.search}`;
                   if (!q.visited(nurl)) {
                     Robots.canCrawl(nurl).then(okay => okay && q.addURL(nurl));
