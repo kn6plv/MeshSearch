@@ -21,6 +21,7 @@ RUN apk add nodejs npm ;\
     cd /search/search ; npm install --production ;\
     cd /search/crawl ; npm install --production ;\
     npm install --production ;\
+    chmod 777 /search/utils/* ;\
     apk del npm build-base curl git
 
 EXPOSE 7701/tcp
