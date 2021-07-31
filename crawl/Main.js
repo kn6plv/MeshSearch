@@ -41,25 +41,32 @@ function crawl() {
           }
           const page = new HttpPage({ url: url });
           Log(url);
-          if (await page.getStatus() === 200) {
-            if (SearchSelector.includePageLinks(page)) {
-              const urls = page.getLinks().links;
-              urls.forEach(url => {
-                if (SearchSelector.includeUrl(url, page.url)) {
-                  const nurl = `${url.origin}${url.pathname}${url.search}`;
-                  if (!q.visited(nurl)) {
-                    Robots.canCrawl(nurl).then(okay => okay && q.addURL(nurl));
+          switch (await page.getStatus()) {
+            case 200:
+            case 301:
+            case 302:
+            case 303:
+            case 307:
+            case 308:
+              if (SearchSelector.includePageLinks(page)) {
+                const urls = page.getLinks().links;
+                urls.forEach(url => {
+                  if (SearchSelector.includeUrl(url, page.url)) {
+                    const nurl = `${url.origin}${url.pathname}${url.search}`;
+                    if (!q.visited(nurl)) {
+                      Robots.canCrawl(nurl).then(okay => okay && q.addURL(nurl));
+                    }
                   }
-                }
-              });
-            }
-            q.completeUrl(url);
-            if (SearchSelector.includePageInSearch(page)) {
-              u.addDoc(page);
-            }
-          }
-          else {
-            q.completeUrl(url, 'error');
+                });
+              }
+              q.completeUrl(url);
+              if (SearchSelector.includePageInSearch(page)) {
+                u.addDoc(page);
+              }
+              break;
+            default:
+              q.completeUrl(url, 'error');
+              break;
           }
         }
       }
