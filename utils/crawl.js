@@ -7,19 +7,21 @@ const HttpPage = require('../crawl/HttpPage');
 const SearchSelector = require('../crawl/search/Selector');
 const Robots = require('../crawl/search/Robots');
 
-const resolver = new DNS.Resolver();
-resolver.setServers(Config.dns);
-const lookup = (hostname, _, callback) => {
-  resolver.resolve4(hostname, (err, addresses) => {
-    if (err) {
-      callback(err);
-    }
-    else {
-      callback(null, addresses[0], 4);
-    }
-  });
+if (Config.dns) {
+  const resolver = new DNS.Resolver();
+  resolver.setServers(Config.dns);
+  const lookup = (hostname, _, callback) => {
+    resolver.resolve4(hostname, (err, addresses) => {
+      if (err) {
+        callback(err);
+      }
+      else {
+        callback(null, addresses[0], 4);
+      }
+    });
+  }
+  HttpPage.setDNS(lookup);
 }
-HttpPage.setDNS(lookup);
 
 const page = new HttpPage({ url: process.argv[2] });
 page.getStatus().then(status => {

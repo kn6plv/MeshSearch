@@ -13,19 +13,21 @@ process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
 const u = new SearchPageUpdate();
 
-const resolver = new DNS.Resolver();
-resolver.setServers(Config.dns);
-const lookup = (hostname, _, callback) => {
-  resolver.resolve4(hostname, (err, addresses) => {
-    if (err) {
-      callback(err);
-    }
-    else {
-      callback(null, addresses[0], 4);
-    }
-  });
+if (Config.dns) {
+  const resolver = new DNS.Resolver();
+  resolver.setServers(Config.dns);
+  const lookup = (hostname, _, callback) => {
+    resolver.resolve4(hostname, (err, addresses) => {
+      if (err) {
+        callback(err);
+      }
+      else {
+        callback(null, addresses[0], 4);
+      }
+    });
+  }
+  HttpPage.setDNS(lookup);
 }
-HttpPage.setDNS(lookup);
 
 function crawl() {
   const q = new UrlQ();
