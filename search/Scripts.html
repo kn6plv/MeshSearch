@@ -9,6 +9,7 @@
       history.replaceState({}, null, q);
     }
     r.send();
+    document.getElementById('results').innerHTML = '';
     document.getElementById('q').value = s || '';
   }
   window.onload = function() {
