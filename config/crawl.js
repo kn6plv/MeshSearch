@@ -4,6 +4,7 @@ module.exports = {
   engineHost: `http://${Engine.address}`,
   key: Engine.privateKey,
   index: 'web1',
+  root: 'http://kn6plv-brkoxfla-omni.local.mesh/',
   crawlFrequency: 4 * 60 * 60, // Every 4 hours
   threads: 8,
   getTimeout: 60,

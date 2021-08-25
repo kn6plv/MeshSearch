@@ -80,7 +80,7 @@ function crawl() {
       }
     }
   });
-  q.addURL('http://localnode.local.mesh');
+  q.addURL(Config.root);
 }
 
 setInterval(crawl, Config.crawlFrequency * 1000);
