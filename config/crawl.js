@@ -9,5 +9,5 @@ module.exports = {
   threads: 8,
   getTimeout: 60,
   getProgressTimeout: 10,
-  userAgent: 'Mozilla/5.0 (compatible;AREDNCrawlBot;+tim.j.wilkinson+kn6plv@gmail.com)'
+  userAgent: 'Mozilla/5.0 (compatible;AREDNCrawlBot;+tim.j.wilkinson@gmail.com)'
 };
