@@ -101,6 +101,7 @@ html, body {
   display: flex;
   flex-direction: column;
   flex: 1;
+  overflow-x: hidden;
   padding-top: 84px;
   background-color: var(--default-background-color);
 }
