@@ -26,7 +26,7 @@
   --search-text-color: #f0f0f0;
   --search-background-color: #404040;
   --button-border-color: #2e2e2e;
-  --footer-background-color: #282828;
+  --footer-background-color: #2e2e2e;
   --footer-text-color: #a0a0a0;
   --summary-text-color: #808080;
   --image-border-color: #404040;
@@ -45,7 +45,7 @@ html, body {
   font-family: Arial, Helvetica, sans-serif;
   padding: 0;
   margin: 0;
-  background-color: var(--default-background-color);
+  background-color: var(--bar-background-color);
 }
 .bar {
   position: fixed;
@@ -102,6 +102,7 @@ html, body {
   flex-direction: column;
   flex: 1;
   padding-top: 84px;
+  background-color: var(--default-background-color);
 }
 .rbody {
   flex: 1;
